@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profile — StyleLink</title>
+
+<style>
+body{font-family:Arial;background:#f3f7fb;margin:0;padding:18px;}
+.nav{background:#fff;border-bottom:1px solid #ddd;padding:8px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.nav a{text-decoration:none;color:#14b8a6;font-weight:bold;}
+.box{background:#fff;padding:16px;margin:10px auto;max-width:520px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.12);}
+img{width:100%;border-radius:12px;margin-bottom:10px;}
+h2{color:#14b8a6;text-align:center;}
+.btn{display:block;text-align:center;margin-top:10px;background:#14b8a6;color:#fff;padding:12px;border-radius:10px;text-decoration:none;font-weight:bold;}
+</style>
+</head>
+
+<body>
+
+<div class="nav">
+ <a href="index.html">Home</a>
+ <a href="addprofile.html">Add Profile</a>
+ <a href="staff.html">Staff</a>
+ <a href="admin.html">Admin</a>
+ <a href="contact.html">Contact</a>
+</div>
+
+<div class="box" id="profileBox"></div>
+
+<p style="text-align:center;"><a href="staff.html">← Back to Staff</a></p>
+
+<script>
+const params=new URLSearchParams(location.search);
+const id=params.get("id");
+let data=JSON.parse(localStorage.getItem("approvedProfiles")||"[]");
+let person=data.find(p=>String(p.id)===String(id));
+let box=profileBox;
+
+if(!person){
+ box.innerHTML="<p>Profile not found.</p>";
+}else{
+ let num = person.phone && person.phone.trim()!="" ? person.phone.trim() : "254725599354";
+ box.innerHTML=`
+  <img src="${person.photo||''}">
+  <h2>${person.name}</h2>
+  <p><b>Category:</b> ${person.skill||''}</p>
+  <p><b>City:</b> ${person.city||''}</p>
+  <p><b>About:</b><br>${person.about||'No description yet.'}</p>
+  <a class="btn" href="https://wa.me/${num}?text=Hi%20${encodeURIComponent(person.name)}%2C%20I%20found%20you%20on%20StyleLink%20and%20want%20to%20book." target="_blank">
+   🚀 Book Now on WhatsApp
+  </a>
+ `;
+}
+</script>
+
+</body>
+</html>

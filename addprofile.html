@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add Profile — StyleLink</title>
+
+<style>
+body{font-family:Arial;background:#f3f7fb;margin:0;}
+.nav{background:#fff;border-bottom:1px solid #ddd;padding:8px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.nav a{text-decoration:none;color:#14b8a6;font-weight:bold;}
+.container{max-width:520px;margin:16px auto;background:#fff;padding:16px;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,.12);}
+input,select,textarea{width:100%;padding:10px;margin-top:6px;border:1px solid #ccc;border-radius:10px;}
+button{width:100%;padding:12px;border:none;background:#14b8a6;color:#fff;border-radius:12px;font-size:16px;margin-top:10px;}
+</style>
+</head>
+
+<body>
+
+<div class="nav">
+ <a href="index.html">Home</a>
+ <a href="addprofile.html">Add Profile</a>
+ <a href="staff.html">Staff</a>
+ <a href="admin.html">Admin</a>
+ <a href="contact.html">Contact</a>
+</div>
+
+<div class="container">
+<h2 style="text-align:center;color:#14b8a6;">Add Your Profile</h2>
+
+<form id="profileForm">
+
+<input placeholder="Full Name" required id="name">
+<input placeholder="Email" required id="email" type="email">
+<input placeholder="City" required id="city">
+<input placeholder="WhatsApp Number e.g. 2547XXXXXXX" id="phone">
+
+<select id="skill" required>
+<option>Barber</option>
+<option>Hair Stylist</option>
+<option>Nail Tech</option>
+<option>Makeup Artist</option>
+<option>Spa Therapist</option>
+</select>
+
+<label>Upload Photo</label>
+<input type="file" accept="image/*" id="photo" required>
+
+<textarea id="about" placeholder="About you..." rows="3"></textarea>
+
+<button type="submit">Submit Profile</button>
+
+</form>
+
+<p id="msg" style="text-align:center;font-weight:bold;"></p>
+
+<p style="text-align:center;"><a href="index.html">← Back</a></p>
+</div>
+
+<script>
+document.getElementById("profileForm").onsubmit=function(e){
+ e.preventDefault();
+ let reader=new FileReader();
+ reader.onload=function(){
+  let pending=JSON.parse(localStorage.getItem("pendingProfiles")||"[]");
+  pending.push({
+   id:Date.now(),
+   name:name.value,
+   email:email.value,
+   city:city.value,
+   phone:phone.value,
+   skill:skill.value,
+   about:about.value,
+   photo:reader.result
+  });
+  localStorage.setItem("pendingProfiles",JSON.stringify(pending));
+  msg.innerText="✔ Profile submitted — awaiting approval";
+  e.target.reset();
+ }
+ reader.readAsDataURL(photo.files[0]);
+};
+</script>
+
+</body>
+</html>

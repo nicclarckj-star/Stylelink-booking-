@@ -2,69 +2,63 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StyleLink — Admin Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — StyleLink</title>
 
 <style>
-body{
-  font-family:Arial;
-  background:#f3f7fb;
-  margin:0;
-}
-
-.header{
-  text-align:center;
-  font-size:22px;
-  color:#14b8a6;
-  margin:20px;
-}
-
-.card{
-  max-width:420px;
-  margin:12px auto;
-  background:#fff;
-  padding:16px;
-  border-radius:12px;
-  box-shadow:0 3px 10px rgba(0,0,0,.12);
-}
+body{font-family:Arial;background:#f3f7fb;margin:0;padding:18px;}
+.nav{background:#fff;border-bottom:1px solid #ddd;padding:8px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.nav a{text-decoration:none;color:#14b8a6;font-weight:bold;}
+h2{text-align:center;color:#14b8a6;}
+.card{background:#fff;padding:14px;margin:10px auto;max-width:520px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.12);}
+img{width:100%;border-radius:12px;margin-top:8px;}
+button{padding:8px 16px;border:none;border-radius:8px;margin:6px;}
+.approve{background:#14b8a6;color:#fff;}
+.reject{background:#e63946;color:#fff;}
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  🛠 StyleLink — Admin Dashboard
+<div class="nav">
+ <a href="index.html">Home</a>
+ <a href="addprofile.html">Add Profile</a>
+ <a href="staff.html">Staff</a>
+ <a href="admin.html">Admin</a>
+ <a href="contact.html">Contact</a>
 </div>
 
+<h2>Pending Profiles</h2>
 <div id="list"></div>
 
 <script>
-function load(){
+let pending=JSON.parse(localStorage.getItem("pendingProfiles")||"[]");
+let approved=JSON.parse(localStorage.getItem("approvedProfiles")||"[]");
+let box=list;
 
-  let list = JSON.parse(localStorage.getItem("approvedProfiles")) || [];
-  let box = document.getElementById("list");
-  box.innerHTML = "";
-
-  if(list.length === 0){
-    box.innerHTML = "<p style='text-align:center;color:#777;'>No profiles yet.</p>";
-    return;
-  }
-
-  list.forEach(p=>{
-    let c = document.createElement("div");
-    c.className = "card";
-    c.innerHTML = `
-      <p><b>${p.name}</b></p>
-      <p>${p.email}</p>
-      <p>${p.city}</p>
-      <p>${p.skill}</p>
-    `;
-    box.appendChild(c);
-  });
+function reload(){
+ box.innerHTML="";
+ if(!pending.length){box.innerHTML="<p style='text-align:center'>No pending.</p>";return;}
+ pending.forEach((p,i)=>{
+  let c=document.createElement("div");
+  c.className="card";
+  c.innerHTML=`<b>${p.name}</b><br>${p.city} — ${p.skill}<br><img src="${p.photo}">`;
+  let a=document.createElement("button");
+  a.className="approve";a.innerText="Approve";
+  a.onclick=()=>{approved.push(p);pending.splice(i,1);
+  localStorage.setItem("approvedProfiles",JSON.stringify(approved));
+  localStorage.setItem("pendingProfiles",JSON.stringify(pending));reload();};
+  let r=document.createElement("button");
+  r.className="reject";r.innerText="Reject";
+  r.onclick=()=>{pending.splice(i,1);
+  localStorage.setItem("pendingProfiles",JSON.stringify(pending));reload();};
+  c.appendChild(a);c.appendChild(r);box.appendChild(c);
+ });
 }
-
-load();
+reload();
 </script>
+
+<p style="text-align:center;"><a href="index.html">← Back</a></p>
 
 </body>
 </html>

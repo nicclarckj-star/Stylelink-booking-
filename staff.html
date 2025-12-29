@@ -2,77 +2,76 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StyleLink — Staff Profiles</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Staff — StyleLink</title>
 
 <style>
-body{
-  font-family:Arial;
-  background:#f3f7fb;
-  margin:0;
-}
-
-.header{
-  text-align:center;
-  font-size:22px;
-  color:#14b8a6;
-  margin:20px;
-}
-
-.card{
-  max-width:420px;
-  margin:12px auto;
-  background:#fff;
-  padding:16px;
-  border-radius:12px;
-  box-shadow:0 3px 10px rgba(0,0,0,.12);
-}
-
-.empty{
-  text-align:center;
-  color:#888;
-}
+body{font-family:Arial;background:#f3f7fb;margin:0;padding:18px;}
+.nav{background:#fff;border-bottom:1px solid #ddd;padding:8px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.nav a{text-decoration:none;color:#14b8a6;font-weight:bold;}
+.card{background:#fff;padding:14px;margin:10px auto;max-width:520px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.12);text-decoration:none;color:#000;}
+img{width:100%;border-radius:12px;margin-top:8px;}
+input,select{width:100%;padding:10px;margin-top:6px;border-radius:10px;border:1px solid #ccc;}
+h2{text-align:center;color:#14b8a6;}
+.view{display:inline-block;margin-top:6px;color:#14b8a6;font-weight:bold;}
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  👩‍🎨 StyleLink — Staff Profiles
+<div class="nav">
+ <a href="index.html">Home</a>
+ <a href="addprofile.html">Add Profile</a>
+ <a href="staff.html">Staff</a>
+ <a href="admin.html">Admin</a>
+ <a href="contact.html">Contact</a>
 </div>
 
-<div id="staffList"></div>
+<h2>Find Beauty Professionals</h2>
+
+<div style="max-width:520px;margin:auto;">
+<input id="city" placeholder="Search by city…">
+<select id="cat">
+ <option value="">All Categories</option>
+ <option>Barber</option>
+ <option>Hair Stylist</option>
+ <option>Nail Tech</option>
+ <option>Makeup Artist</option>
+ <option>Spa Therapist</option>
+</select>
+</div>
+
+<div id="list"></div>
 
 <script>
-function loadStaff(){
+let data=JSON.parse(localStorage.getItem("approvedProfiles")||"[]");
+data.forEach((p,i)=>{if(!p.id)p.id=i+1;});
+localStorage.setItem("approvedProfiles",JSON.stringify(data));
 
-  let list = JSON.parse(localStorage.getItem("approvedProfiles")) || [];
-  let box = document.getElementById("staffList");
-  box.innerHTML = "";
-
-  if(list.length === 0){
-    box.innerHTML = "<p class='empty'>No profiles yet.</p>";
-    return;
-  }
-
-  list.sort((a,b)=>a.city.localeCompare(b.city));
-
-  list.forEach(p=>{
-    let card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <p><b>Name:</b> ${p.name}</p>
-      <p><b>Email:</b> ${p.email}</p>
-      <p><b>City:</b> ${p.city}</p>
-      <p><b>Skill:</b> ${p.skill}</p>
-    `;
-    box.appendChild(card);
-  });
+function render(){
+ let box=list;
+ box.innerHTML="";
+ let c=city.value.toLowerCase();
+ let k=cat.value;
+ let f=data.filter(p=>
+  (!c||(p.city||'').toLowerCase().includes(c)) &&
+  (!k||p.skill==k)
+ );
+ if(!f.length){box.innerHTML="<p style='text-align:center'>No matches</p>";return;}
+ f.forEach(p=>{
+  let d=document.createElement("a");
+  d.className="card";
+  d.href="profile.html?id="+p.id;
+  d.innerHTML=`<b>${p.name}</b> — ${p.skill}<br>${p.city||''}<br><img src="${p.photo||''}"><span class='view'>View Profile →</span>`;
+  box.appendChild(d);
+ });
 }
-
-loadStaff();
+city.oninput=render;
+cat.onchange=render;
+render();
 </script>
+
+<p style="text-align:center;"><a href="index.html">← Back</a></p>
 
 </body>
 </html>
