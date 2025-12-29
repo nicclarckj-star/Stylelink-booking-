@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StyleLink — Admin Dashboard</title>
+
+<style>
+body{
+  font-family:Arial;
+  background:#f3f7fb;
+  margin:0;
+}
+
+.header{
+  text-align:center;
+  font-size:22px;
+  color:#14b8a6;
+  margin:20px;
+}
+
+.card{
+  max-width:420px;
+  margin:12px auto;
+  background:#fff;
+  padding:16px;
+  border-radius:12px;
+  box-shadow:0 3px 10px rgba(0,0,0,.12);
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  🛠 StyleLink — Admin Dashboard
+</div>
+
+<div id="list"></div>
+
+<script>
+function load(){
+
+  let list = JSON.parse(localStorage.getItem("approvedProfiles")) || [];
+  let box = document.getElementById("list");
+  box.innerHTML = "";
+
+  if(list.length === 0){
+    box.innerHTML = "<p style='text-align:center;color:#777;'>No profiles yet.</p>";
+    return;
+  }
+
+  list.forEach(p=>{
+    let c = document.createElement("div");
+    c.className = "card";
+    c.innerHTML = `
+      <p><b>${p.name}</b></p>
+      <p>${p.email}</p>
+      <p>${p.city}</p>
+      <p>${p.skill}</p>
+    `;
+    box.appendChild(c);
+  });
+}
+
+load();
+</script>
+
+</body>
+</html>

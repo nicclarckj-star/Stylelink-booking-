@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StyleLink — Global Beauty Network</title>
+
+<style>
+body{
+  font-family: Arial;
+  background:#f3f7fb;
+  margin:0;
+}
+
+.header{
+  text-align:center;
+  font-size:22px;
+  color:#14b8a6;
+  margin:20px;
+}
+
+.counter{
+  text-align:center;
+  margin-bottom:10px;
+}
+
+.card{
+  display:block;
+  max-width:420px;
+  margin:12px auto;
+  background:#fff;
+  padding:16px;
+  border-radius:14px;
+  box-shadow:0 4px 12px rgba(0,0,0,.12);
+  text-decoration:none;
+  color:#000;
+  font-size:18px;
+  position:relative;
+  z-index:5;
+}
+
+section{
+  max-width:420px;
+  margin:25px auto;
+  background:#fff;
+  padding:18px;
+  border-radius:10px;
+  box-shadow:0 2px 10px rgba(0,0,0,.12);
+  position:relative;
+  z-index:1;
+}
+
+h3{
+  text-align:center;
+  color:#14b8a6;
+  margin-bottom:15px;
+}
+
+input, textarea{
+  width:100%;
+  padding:10px;
+  margin:6px 0 12px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+button{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  background:#14b8a6;
+  color:white;
+  border:none;
+  font-size:16px;
+}
+
+footer{
+  text-align:center;
+  margin-top:20px;
+}
+
+.fab{
+  position:fixed;
+  right:18px;
+  bottom:20px;
+  background:#25D366;
+  color:#fff;
+  padding:14px 18px;
+  border-radius:40px;
+  font-size:16px;
+  text-decoration:none;
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  StyleLink — Global Beauty Network
+</div>
+
+<p class="counter">
+  👥 <span id="visits">0</span> people have visited StyleLink
+</p>
+
+<!-- MAIN BUTTONS -->
+<a class="card" href="#booking">📅 Book a Professional</a>
+
+<a class="card" href="#register">📄 Register on StyleLink</a>
+
+<a class="card" href="#hire">💇‍♂️💼 Hire Staff</a>
+
+<a class="card" href="staff.html">👩‍🎨 View Staff Profiles</a>
+
+<footer>
+  StyleLink © 2025 — Global Beauty Network <br>
+  <a href="privacy.html">Privacy Policy</a> • <a href="terms.html">Terms</a>
+</footer>
+
+<!-- REGISTER -->
+<section id="register">
+<h3>Register on StyleLink</h3>
+
+<form id="registerForm">
+
+<label>Name</label>
+<input type="text" name="name" required>
+
+<label>Email</label>
+<input type="email" name="email" required>
+
+<label>Country / City</label>
+<input type="text" name="city" required>
+
+<label>Skill / Profession</label>
+<input type="text" name="skill" required>
+
+<button type="submit">Submit Registration</button>
+</form>
+</section>
+
+
+<!-- HIRE STAFF -->
+<section id="hire">
+<h3>Hire Staff on StyleLink</h3>
+
+<form action="https://api.web3forms.com/submit" method="POST">
+<input type="hidden" name="access_key" value="6cd136cc-f096-4068-b7a8-7e8ee17ef8bb">
+<input type="hidden" name="subject" value="Hire Staff Request">
+
+<label>Your Name</label>
+<input type="text" name="name" required>
+
+<label>Your Email</label>
+<input type="email" name="email" required>
+
+<label>Salon / Business</label>
+<input type="text" name="business" required>
+
+<label>Country / City</label>
+<input type="text" name="location" required>
+
+<label>Message</label>
+<textarea name="message" rows="4" required></textarea>
+
+<button type="submit">Submit Hire Request</button>
+</form>
+</section>
+
+
+<!-- BOOKING -->
+<section id="booking">
+<h3>Book a Professional</h3>
+
+<form action="https://api.web3forms.com/submit" method="POST">
+<input type="hidden" name="access_key" value="6cd136cc-f096-4068-b7a8-7e8ee17ef8bb">
+<input type="hidden" name="subject" value="New Booking Request">
+
+<label>Your Name</label>
+<input type="text" name="name" required>
+
+<label>Your Email</label>
+<input type="email" name="email" required>
+
+<label>Service Needed</label>
+<input type="text" name="service" required>
+
+<label>Country / City</label>
+<input type="text" name="location" required>
+
+<label>Message</label>
+<textarea name="message" rows="4" required></textarea>
+
+<button type="submit">Submit Booking</button>
+</form>
+</section>
+
+<!-- WHATSAPP FLOAT -->
+<a class="fab" href="https://wa.me/254725599354?text=Hi%20StyleLink%2C%20I%27d%20like%20to%20book%20a%20service." target="_blank">
+💬 Chat on WhatsApp
+</a>
+
+<script>
+// VISIT COUNTER
+let c = parseInt(localStorage.getItem("visits") || 0);
+c++;
+localStorage.setItem("visits", c);
+document.getElementById("visits").innerText = c;
+
+// REGISTER — AUTO APPROVE
+document.getElementById("registerForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  let profile = {
+    name:this.name.value,
+    email:this.email.value,
+    city:this.city.value,
+    skill:this.skill.value
+  };
+
+  let list = JSON.parse(localStorage.getItem("approvedProfiles")) || [];
+  list.push(profile);
+  localStorage.setItem("approvedProfiles", JSON.stringify(list));
+
+  alert("Registration successful! Your profile is now live.");
+  this.reset();
+});
+</script>
+
+</body>
+</html>
